@@ -1,0 +1,336 @@
+load("/Users/mengwang/Documents/code/real data/family_genotype_count.RData")
+print(load("/Users/mengwang/Documents/code/real data/family_genotype_count.RData"))
+head(dat1)
+dim(dat1)
+source("DP_TDT_fn.R")
+load("family_genotype_count.RData")
+dat0 = read.table("family_genotype_count.txt")
+head(dat0)
+rowSums(dat1[,-c(1,2)])
+no_col <- max(count.fields("tdt_count_output.txt", sep = ""))#
+dat = read.delim("tdt_count_output.txt", sep="", col.names=1:no_col, fill=TRUE, header=FALSE)#
+dat = dat[,-(1:4)]#
+names.dat = dat[,seq(3,dim(dat)[2], by=2)]#
+count.dat = dat[,seq(4,dim(dat)[2], by=2)]#
+sum(dim(names.dat)[2] == dim(count.dat)[2])
+names.vec = c("M_m+M_m=M_M", "M_m+M_m=m_m", "M_m+M_m=M_m", "M_M+M_m=M_M","M_m+M_M=M_M", "M_m+m_m=M_m", "m_m+M_m=M_m", "M_M+M_m=M_m","M_m+M_M=M_m", "M_m+m_m=m_m", "m_m+M_m=m_m")#
+dat.mx = matrix(0, nrow=dim(dat)[1], ncol=length(names.vec))#
+colnames(dat.mx) = names.vec#
+#
+for (i in 1:dim(dat)[1]) {#
+	dum = rep(0, dim(names.dat)[2])#
+	for (k in 1:dim(names.dat)[2]){#
+		 dum[k] = as.vector(count.dat[i,k])        #
+	     names(dum)[k] = as.vector(names.dat[i,k])#
+	}#
+	dat.mx[i,] = dum[names.vec]    #
+}#
+dat.mx[is.na(dat.mx)] = 0#
+#
+dat1 = matrix(0, nrow=dim(dat)[1], ncol=7)#
+colnames(dat1) = c("c", "b", "(2,0)", "(0,2)", "(1,1)", "(1,0)", "(0,1)")#
+dat1[,1] = dat[,1]#
+dat1[,2] = dat[,2]#
+dat1[,3:5] = dat.mx[,1:3]#
+dat1[,6] = rowSums(dat.mx[,4:7]) #rowSums(dat.mx[,4:7], na.rm=TRUE)#
+dat1[,7] = rowSums(dat.mx[,8:11]) #rowSums(dat.mx[,8:11], na.rm=TRUE)#
+#dat1[is.na(dat1)] = 0
+b1 = 2*dat1[,3]+dat1[,5]+dat1[,6]#
+c1 = 2*dat1[,4]+dat1[,5]+dat1[,7]#
+cbind(c1, b1, dat1)#
+b1 - dat[,2]#
+c1 - dat[,1]
+dat1[,1] = 2*dat1[,3]+dat1[,5]+dat1[,6]#
+dat1[,2] = 2*dat1[,4]+dat1[,5]+dat1[,7]#
+cbind(c1, b1, dat1)
+dat1
+dat1[,2] = 2*dat1[,3]+dat1[,5]+dat1[,6]#
+dat1[,1] = 2*dat1[,4]+dat1[,5]+dat1[,7]
+dat1
+colnames(dat1) = c("b", "c", "(2,0)", "(0,2)", "(1,1)", "(1,0)", "(0,1)")
+dat1 = matrix(0, nrow=dim(dat)[1], ncol=7)#
+colnames(dat1) = c("b", "c", "(2,0)", "(0,2)", "(1,1)", "(1,0)", "(0,1)")#
+#dat1[,2] = dat[,1]#
+#dat1[,1] = dat[,2]#
+dat1[,3:5] = dat.mx[,1:3]#
+dat1[,6] = rowSums(dat.mx[,4:7]) #rowSums(dat.mx[,4:7], na.rm=TRUE)#
+dat1[,7] = rowSums(dat.mx[,8:11]) #rowSums(dat.mx[,8:11], na.rm=TRUE)#
+#dat1[is.na(dat1)] = 0#
+#
+dat1[,2] = 2*dat1[,3]+dat1[,5]+dat1[,6]#
+dat1[,1] = 2*dat1[,4]+dat1[,5]+dat1[,7]
+dat1
+dat1[,1] = 2*dat1[,3]+dat1[,5]+dat1[,6]
+dat1[,2] = 2*dat1[,4]+dat1[,5]+dat1[,7]
+dat1
+rowSums(dat1[,-c(1,2)])
+dat1[,8] = 20 - rowSums(dat1[,-c(1,2)])
+N = 20 # 20 families in total#
+dat1 = matrix(0, nrow=dim(dat)[1], ncol=8)#
+colnames(dat1) = c("b", "c", "(2,0)", "(0,2)", "(1,1)", "(1,0)", "(0,1)", "(0,0)")#
+#dat1[,2] = dat[,1]#
+#dat1[,1] = dat[,2]#
+dat1[,3:5] = dat.mx[,1:3]#
+dat1[,6] = rowSums(dat.mx[,4:7]) #rowSums(dat.mx[,4:7], na.rm=TRUE)#
+dat1[,7] = rowSums(dat.mx[,8:11]) #rowSums(dat.mx[,8:11], na.rm=TRUE)#
+#dat1[is.na(dat1)] = 0#
+#
+dat1[,1] = 2*dat1[,3]+dat1[,5]+dat1[,6]#
+dat1[,2] = 2*dat1[,4]+dat1[,5]+dat1[,7]#
+dat1[,8] = N - rowSums(dat1[,-c(1,2)])
+dat1
+N = 25 # N families in total#
+dat1 = matrix(0, nrow=dim(dat)[1], ncol=8)#
+colnames(dat1) = c("b", "c", "(2,0)", "(0,2)", "(1,1)", "(1,0)", "(0,1)", "(0,0)")#
+#dat1[,2] = dat[,1]#
+#dat1[,1] = dat[,2]#
+dat1[,3:5] = dat.mx[,1:3]#
+dat1[,6] = rowSums(dat.mx[,4:7]) #rowSums(dat.mx[,4:7], na.rm=TRUE)#
+dat1[,7] = rowSums(dat.mx[,8:11]) #rowSums(dat.mx[,8:11], na.rm=TRUE)#
+#dat1[is.na(dat1)] = 0#
+#
+dat1[,1] = 2*dat1[,3]+dat1[,5]+dat1[,6]#
+dat1[,2] = 2*dat1[,4]+dat1[,5]+dat1[,7]#
+dat1[,8] = N - rowSums(dat1[,-c(1,2)])
+dat1
+dat1 = data.frame(dat1)
+dat1
+N = 25 # N families in total#
+dat1 = matrix(0, nrow=dim(dat)[1], ncol=8)#
+colnames(dat1) = c("b", "c", "(2,0)", "(0,2)", "(1,1)", "(1,0)", "(0,1)", "(0,0)")#
+#dat1[,2] = dat[,1]#
+#dat1[,1] = dat[,2]#
+dat1[,3:5] = dat.mx[,1:3]#
+dat1[,6] = rowSums(dat.mx[,4:7]) #rowSums(dat.mx[,4:7], na.rm=TRUE)#
+dat1[,7] = rowSums(dat.mx[,8:11]) #rowSums(dat.mx[,8:11], na.rm=TRUE)#
+#dat1[is.na(dat1)] = 0#
+#
+dat1[,1] = 2*dat1[,3]+dat1[,5]+dat1[,6]#
+dat1[,2] = 2*dat1[,4]+dat1[,5]+dat1[,7]#
+dat1[,8] = N - rowSums(dat1[,-c(1,2)])#
+#
+dat1
+write.table(dat1, file="DP_TDT_data.txt")
+save(dat1, file="DP_TDT_data.RData")
+load("DP_TDT_data.RData")
+dat = read.table("DP_TDT_data.txt")
+dat
+N = 25 # N families in total#
+dat1 = matrix(0, nrow=dim(dat)[1], ncol=8)#
+colnames(dat1) = c("b", "c", "(2,0)", "(0,2)", "(1,1)", "(1,0)", "(0,1)", "(0,0)")#
+#dat1[,2] = dat[,1]#
+#dat1[,1] = dat[,2]#
+dat1[,3:5] = dat.mx[,1:3]#
+dat1[,6] = rowSums(dat.mx[,4:7]) #rowSums(dat.mx[,4:7], na.rm=TRUE)#
+dat1[,7] = rowSums(dat.mx[,8:11]) #rowSums(dat.mx[,8:11], na.rm=TRUE)#
+#dat1[is.na(dat1)] = 0#
+#
+dat1[,1] = 2*dat1[,3]+dat1[,5]+dat1[,6]#
+dat1[,2] = 2*dat1[,4]+dat1[,5]+dat1[,7]#
+dat1[,8] = N - rowSums(dat1[,-c(1,2)])#
+#
+dat1
+write.table(dat1, file="DP_TDT_data.txt")
+save(dat1, file="DP_TDT_data.RData")
+dat = read.table("DP_TDT_data.txt")
+dat
+colnames(dat) = c("b", "c", "(2,0)", "(0,2)", "(1,1)", "(1,0)", "(0,1)", "(0,0)")
+dat
+K = 1 # number of significant SNPs to release#
+eps = 3 # privacy budget#
+dat.stat = (dat[,1] - dat[,2])^2/(dat[,1] + dat[,2])#
+dat.stat[is.na(dat.stat)] = 0 # test statistics#
+ind.sig.dat = order(dat.stat, decreasing=TRUE)[1:K]
+lap.scale = (2*K*8*(N-1)/N)/eps#
+stat.lap = dat.stat + rLap(length(dat.stat), 0, 1/lap.scale) # test statistic + laplace noise#
+ind.sig.lap = order(stat.lap, decreasing=TRUE)[1:K]#
+utility.lap.stat = length(intersect(ind.sig.dat, ind.sig.lap))/length(ind.sig.dat)#
+utility.lap.stat
+score = dat.stat#
+sen.score = 8*(N-1)/N#
+ind.sig.expon = expon.set.sig(K, eps, score, sen.score)#
+utility.exp.stat = length(intersect(ind.sig.dat, ind.sig.expon))/length(ind.sig.dat)#
+utility.exp.stat
+thres = qchisq(1 - 0.05/M, df=1)#
+dat.uq.score = SHD_fn(dat, N, thres) #
+dat.shd = matrix(0, nrow=nrow(dat), ncol=3)#
+dat.shd[,1:2] = dat#
+rownames(dat.shd) = rownames(dat)#
+score.nm = rownames(dat.uq.score)[match(rownames(dat), rownames(dat.uq.score))]#
+dat.shd[,3] = dat.uq.score[score.nm,1]#
+score = dat.shd[,3]#
+sen.score = 1#
+ind.sig.expon.ham.grad = expon.set.sig(K, eps, score, sen.score)#
+utility.shd.apprx = length(intersect(ind.sig.dat, ind.sig.expon.ham.grad))/length(ind.sig.dat)#
+utility.shd.apprx
+head(dat)#
+N = 25 # family number#
+M = dim(dat) # SNP number
+thres = qchisq(1 - 0.05/M, df=1)#
+dat.uq.score = SHD_fn(dat, N, thres) #
+dat.shd = matrix(0, nrow=nrow(dat), ncol=3)#
+dat.shd[,1:2] = dat#
+rownames(dat.shd) = rownames(dat)#
+score.nm = rownames(dat.uq.score)[match(rownames(dat), rownames(dat.uq.score))]#
+dat.shd[,3] = dat.uq.score[score.nm,1]#
+score = dat.shd[,3]#
+sen.score = 1#
+ind.sig.expon.ham.grad = expon.set.sig(K, eps, score, sen.score)#
+utility.shd.apprx = length(intersect(ind.sig.dat, ind.sig.expon.ham.grad))/length(ind.sig.dat)#
+utility.shd.apprx
+dat.uq.score = SHD_fn(dat, N, thres)
+warnings()
+N = 150#
+M = 5000#
+n = 2*N#
+M.1 = 10 #
+bc.sum = sample(0:n, M, replace=TRUE)#
+dat.b = rbinom(M, bc.sum, 0.5)#
+dat.c = bc.sum - dat.b#
+ind = order(bc.sum, decreasing=TRUE)[1:M.1]#
+dat.b[ind] = rbinom(M.1, bc.sum[ind], 0.65)#
+dat.c[ind] = bc.sum[ind] - dat.b[ind]#
+dat.stat = (dat.b - dat.c)^2/(dat.b + dat.c)#
+dat.stat[is.na(dat.stat)] = 0#
+dat = cbind(dat.b, dat.c)#
+dat[dat[,1] < dat[,2],] = dat[dat[,1] < dat[,2], c(2,1)]#
+colnames(dat) = c("b", "c")#
+rownames(dat) =  as.character(dat[,1]*n + dat[,2])
+K = 1 # number of significant SNPs to release#
+eps = 3 # privacy budget#
+dat.stat = (dat[,1] - dat[,2])^2/(dat[,1] + dat[,2])#
+dat.stat[is.na(dat.stat)] = 0 # test statistics#
+ind.sig.dat = order(dat.stat, decreasing=TRUE)[1:K]#
+#
+### Laplace mechanism based on the test statistic#
+lap.scale = (2*K*8*(N-1)/N)/eps#
+stat.lap = dat.stat + rLap(length(dat.stat), 0, 1/lap.scale) # test statistic + laplace noise#
+ind.sig.lap = order(stat.lap, decreasing=TRUE)[1:K]#
+utility.lap.stat = length(intersect(ind.sig.dat, ind.sig.lap))/length(ind.sig.dat)#
+utility.lap.stat
+score = dat.stat#
+sen.score = 8*(N-1)/N#
+ind.sig.expon = expon.set.sig(K, eps, score, sen.score)#
+utility.exp.stat = length(intersect(ind.sig.dat, ind.sig.expon))/length(ind.sig.dat)#
+utility.exp.stat
+thres = qchisq(1 - 0.05/M, df=1)#
+dat.uq.score = SHD_fn(dat, N, thres) #
+dat.shd = matrix(0, nrow=nrow(dat), ncol=3)#
+dat.shd[,1:2] = dat#
+rownames(dat.shd) = rownames(dat)#
+score.nm = rownames(dat.uq.score)[match(rownames(dat), rownames(dat.uq.score))]#
+dat.shd[,3] = dat.uq.score[score.nm,1]#
+score = dat.shd[,3]#
+sen.score = 1#
+ind.sig.expon.ham.grad = expon.set.sig(K, eps, score, sen.score)#
+utility.shd.apprx = length(intersect(ind.sig.dat, ind.sig.expon.ham.grad))/length(ind.sig.dat)#
+utility.shd.apprx
+dat.exact = read.table("sim_SHD_score_exact.txt")
+sen.score = 1
+dat.exact = read.table("sim_SHD_score_exact.txt")#
+score.exact = dat.exact[,6] # the SHD scores from exact algorithm#
+sen.score = 1#
+ind.sig.expon.ham.exact = expon.set.sig(K, eps, score, sen.score)#
+utility.shd.exact = length(intersect(ind.sig.dat, ind.sig.expon.ham.exact))/length(ind.sig.dat)#
+utility.shd.exact
+head(dat.exact)
+dat.exact = read.table("sim_SHD_score_exact.txt", sep=",")
+head(dat.exact)
+score.exact = dat.exact[,ncol(dat.exact)] # the SHD scores from exact algorithm
+score.exact
+sen.score = 1#
+ind.sig.expon.ham.exact = expon.set.sig(K, eps, score, sen.score)#
+utility.shd.exact = length(intersect(ind.sig.dat, ind.sig.expon.ham.exact))/length(ind.sig.dat)#
+utility.shd.exact
+### Laplace mechanisms based on p-value and truncated p-values#
+dat.pval = 1 - pchisq(dat.stat, df=1) # p-values#
+thres.pval = 0.05/M#
+dat.pval.trunc = pmin(dat.pval, thres.pval) # truncated p-values	#
+#
+sen = pchisq(4, df=1)#
+lap.scale = (2*K*sen)/eps#
+pval.lap = dat.pval + rLap(length(dat.pval), 0, 1/lap.scale) # test statistic + laplace noise#
+ind.sig.lap = order(pval.lap, decreasing=FALSE)[1:K]	#
+utility.lap.pval = length(intersect(ind.sig.dat, ind.sig.lap))/length(ind.sig.dat)#
+utility.lap.pval
+thres.t = qchisq(1-thres.pval, df=1)#
+sen = abs(1 - pchisq((thres.t-4)^2/thres.t, df=1) -thres.pval)#
+lap.scale = (2*K*sen)/eps#
+pval.lap = dat.pval.trunc + rLap(length(dat.pval.trunc), 0, 1/lap.scale) # test statistic + laplace noise#
+ind.sig.lap = order(pval.lap, decreasing=FALSE)[1:K]	#
+utility.lap.trunc.pval = length(intersect(ind.sig.dat, ind.sig.lap))/length(ind.sig.dat)#
+utility.lap.trunc.pval
+load("/Users/mengwang/Documents/code/Github file/sim_data_small_cohort.RData")
+print(load("/Users/mengwang/Documents/code/Github file/sim_data_small_cohort.RData"))
+N
+M
+M.1
+head(dat)
+load("sim_data_small_cohort.RData")
+print(load("sim_data_small_cohort.RData"))
+M.1
+M
+dim(dat)
+head(dat)
+load("sim_data_small_cohort.RData")
+save(N, M, dat, file="sim_data_small_cohort.RData")
+load("sim_data_small_cohort.RData")
+print(load("sim_data_small_cohort.RData"))
+N
+M
+load("sim_data_small_cohort.RData")#
+#
+K = 1 # number of significant SNPs to release#
+eps = 3 # privacy budget#
+dat.stat = (dat[,1] - dat[,2])^2/(dat[,1] + dat[,2])#
+dat.stat[is.na(dat.stat)] = 0 # test statistics#
+ind.sig.dat = order(dat.stat, decreasing=TRUE)[1:K]#
+#
+### Laplace mechanism based on the test statistic#
+lap.scale = (2*K*8*(N-1)/N)/eps#
+stat.lap = dat.stat + rLap(length(dat.stat), 0, 1/lap.scale) # test statistic + laplace noise#
+ind.sig.lap = order(stat.lap, decreasing=TRUE)[1:K]#
+utility.lap.stat = length(intersect(ind.sig.dat, ind.sig.lap))/length(ind.sig.dat)#
+utility.lap.stat
+score = dat.stat#
+sen.score = 8*(N-1)/N#
+ind.sig.expon = expon.set.sig(K, eps, score, sen.score)#
+utility.exp.stat = length(intersect(ind.sig.dat, ind.sig.expon))/length(ind.sig.dat)#
+utility.exp.stat
+thres = qchisq(1 - 0.05/M, df=1)#
+dat.uq.score = SHD_fn(dat, N, thres) #
+dat.shd = matrix(0, nrow=nrow(dat), ncol=3)#
+dat.shd[,1:2] = dat#
+rownames(dat.shd) = rownames(dat)#
+score.nm = rownames(dat.uq.score)[match(rownames(dat), rownames(dat.uq.score))]#
+dat.shd[,3] = dat.uq.score[score.nm,1]#
+score = dat.shd[,3]#
+sen.score = 1#
+ind.sig.expon.ham.grad = expon.set.sig(K, eps, score, sen.score)#
+utility.shd.apprx = length(intersect(ind.sig.dat, ind.sig.expon.ham.grad))/length(ind.sig.dat)#
+utility.shd.apprx
+dat.exact = read.table("sim_SHD_score_exact.txt", sep=",")#
+score.exact = dat.exact[,ncol(dat.exact)] # the SHD scores from exact algorithm#
+sen.score = 1#
+ind.sig.expon.ham.exact = expon.set.sig(K, eps, score, sen.score)#
+utility.shd.exact = length(intersect(ind.sig.dat, ind.sig.expon.ham.exact))/length(ind.sig.dat)#
+utility.shd.exact
+### Laplace mechanisms based on p-value and truncated p-values#
+dat.pval = 1 - pchisq(dat.stat, df=1) # p-values#
+thres.pval = 0.05/M#
+dat.pval.trunc = pmin(dat.pval, thres.pval) # truncated p-values	#
+#
+sen = pchisq(4, df=1)#
+lap.scale = (2*K*sen)/eps#
+pval.lap = dat.pval + rLap(length(dat.pval), 0, 1/lap.scale) # test statistic + laplace noise#
+ind.sig.lap = order(pval.lap, decreasing=FALSE)[1:K]	#
+utility.lap.pval = length(intersect(ind.sig.dat, ind.sig.lap))/length(ind.sig.dat)#
+utility.lap.pval#
+#
+thres.t = qchisq(1-thres.pval, df=1)#
+sen = abs(1 - pchisq((thres.t-4)^2/thres.t, df=1) -thres.pval)#
+lap.scale = (2*K*sen)/eps#
+pval.lap = dat.pval.trunc + rLap(length(dat.pval.trunc), 0, 1/lap.scale) # test statistic + laplace noise#
+ind.sig.lap = order(pval.lap, decreasing=FALSE)[1:K]	#
+utility.lap.trunc.pval = length(intersect(ind.sig.dat, ind.sig.lap))/length(ind.sig.dat)#
+utility.lap.trunc.pval
